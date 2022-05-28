@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Text;
+using HR.Utilities.Events;
+using HR.Utilities.Variables;
 
 public class StoryTextController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI storyDisplayField;
     [SerializeField] float storyDisplayTime;
+    [SerializeField] GameEvent finishedShowingStory;
+    [SerializeField] BoolVariable storyIsPlaying;
     CanvasGroup cg;
     StoryPoint_SO story;
     Coroutine showingStory = null;
@@ -19,6 +23,7 @@ public class StoryTextController : MonoBehaviour
     }
     public void ShowStory()
     {
+        
         story = GameManager.instance.GetCurrentStory();
         if(showingStory!=null && !story.HasBeenSeen())
         {
@@ -29,9 +34,11 @@ public class StoryTextController : MonoBehaviour
            showingStory= StartCoroutine(ShowStoryRoutine());
         }
         
+
     }
     IEnumerator ShowStoryRoutine()
     {
+        storyIsPlaying.Set(true);
         storyDisplayField.text = "";
         cg.alpha = 1;
         //storyDisplayField.text = story.GetStory();
@@ -44,5 +51,7 @@ public class StoryTextController : MonoBehaviour
         }
         yield return new WaitForSeconds(storyDisplayTime);
         cg.alpha = 0;
+        storyIsPlaying.Set(false);
+        finishedShowingStory?.Raise();
     }
 }

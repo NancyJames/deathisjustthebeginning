@@ -6,21 +6,54 @@ using HR.Utilities.Variables;
 using HR.Utilities.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using System;
+
 
 public class PlayerController : MonoBehaviour
 {
-    Rigidbody2D myBody;
+    
+    [Header("Physics")]
     [SerializeField] float speed = 250f;
     [SerializeField] float jumpForce = 50f;
+    Rigidbody2D myBody;
     Vector2 moveInput;
+    [Header("Ability Flags")]
     bool canMove = true;
+    [SerializeField] bool canAttack = false;
+    [SerializeField] bool canJump=true;
+    [Header("Shared Variables")]
     [SerializeField] FloatVariable health;
     [SerializeField] FloatVariable energy;
+    [SerializeField] FloatVariable maxHealth;
+    [SerializeField] FloatVariable maxEnergy;
     [SerializeField] IntVariable debuffs;
-
+    [SerializeField] FloatVariable xpos;
+    [SerializeField] FloatVariable cryCooldown;
+    [SerializeField] FloatVariable currentCryCooldown;
+    [Header("Special Abilities")]
+    [SerializeField] float fireRadius = 5;
+    [SerializeField] float attackCost = 10;
     [SerializeField] float jumpCost;
     [SerializeField] float regenFactor=75f;
+    [SerializeField] float cryHealth = 15f;
+    [SerializeField] float cryEnergy = 10f;
+    [SerializeField] float cryDuration = 1.5f;
+    [SerializeField] float goodMemoryEnergy = 10f;
+    [SerializeField] float newLevelHealthBoost = 5f;
+    [SerializeField] ParticleSystem boom;
+    [SerializeField] ParticleSystem cryParticles;
+    [SerializeField] ParticleSystem goodMemoryParticles;
+    [SerializeField] CircleCollider2D cryForcefield;
+    [SerializeField] List<StoryPoint_SO> cryStories = new();
+
+
+    [Header("Other")]
+    [SerializeField] GameEvent triggerPortalEvent;
+    [SerializeField] GameEvent storyTriggered;
+    [Header("Finale")]
+    [SerializeField] GameEvent finale;
+    [SerializeField] Transform finishLocation;
+    [SerializeField] float floatSpeed;
+    bool isFloating;
 
     float timeSinceJumped = 0f;
     float jumpClearance = 0.2f;
@@ -37,7 +70,20 @@ public class PlayerController : MonoBehaviour
     [Header("Post Processing")]
     [SerializeField] bool desaturateByHeight = false;
     [SerializeField] bool realityFlashes = false;
+    [SerializeField] [Range(-100,100)] float desaturationValue;
+    [SerializeField] [Range(-100, 100)] float overSaturationValue;
     [SerializeField] bool colorize = false;
+    [SerializeField] Color colorOverlay;
+
+    Transform t;
+    bool freezeMovement = false;
+
+    //not used but keeps the variables persisting. Maybe only be required in the editor
+    [Header("Level Visits")]
+    [SerializeField] IntVariable depressionVisited;
+    [SerializeField] IntVariable denialVisited;
+    [SerializeField] IntVariable angerVisited;
+    [SerializeField] IntVariable regretVisited;
     
 
 
@@ -45,7 +91,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         myBody = GetComponent<Rigidbody2D>();
-        myFeet = GetComponent<CircleCollider2D>();
+        myFeet = GetComponentInChildren<CircleCollider2D>();
     }
 
     private void Start()
@@ -53,29 +99,64 @@ public class PlayerController : MonoBehaviour
         cameraVolume = Camera.main.GetComponent<Volume>();
         VolumeProfile profile = cameraVolume.sharedProfile;
         profile.TryGet(out colorAdjustments);
+        t = transform;
         //initialGravity = myBody.gravityScale;
+        if (colorAdjustments != null)
+        {
+            colorAdjustments.saturation.overrideState = false;
+            colorAdjustments.colorFilter.overrideState = false;
+            if (colorize)
+            {
+                colorAdjustments.colorFilter.overrideState = true;
+                colorAdjustments.colorFilter.value = colorOverlay;
+            }
+            if (realityFlashes)
+            {
+                colorAdjustments.saturation.overrideState = true;
+                colorAdjustments.saturation.value = overSaturationValue;
+            }
+            if(desaturateByHeight)
+            {
+                colorAdjustments.saturation.overrideState = true;
+            }
+
+        }
+        
     }
 
-
-
-    private void FixedUpdate()
+    private void Update()
     {
-        CheckGrounded();
-        if (canMove)
-        {
-            Run();
-            FlipSprite();  
-        }
-        Regenerate();
-
-        if(desaturateByHeight)
+        if (desaturateByHeight)
         {
             SetSaturation();
         }
-        
+        Regenerate();
+        CooldownCry();
+
         UpdateDebuffTimers();
+    }
+
+    private void CooldownCry()
+    {
+        if(currentCryCooldown.Get()>0)
+        {
+            currentCryCooldown.Decrement(Time.deltaTime);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        xpos.Set(t.position.x);
+        CheckGrounded();
+
+        Run();
+        FlipSprite();
+        Float();
+        
 
     }
+
+    
 
     private void CheckGrounded()
     {
@@ -114,7 +195,11 @@ public class PlayerController : MonoBehaviour
 
     private void Regenerate()
     {
-        energy.Increment(GetRegenRate() * Time.deltaTime);
+        if(energy.Get()<maxEnergy.Get())
+        {
+            energy.Increment(GetRegenRate() * Time.deltaTime);
+        }
+        
     }
 
     private float GetRegenRate()
@@ -124,14 +209,24 @@ public class PlayerController : MonoBehaviour
 
     private void Run()
     {
-        if(grounded)
+        if(freezeMovement)
         {
-            myBody.velocity = new Vector2(moveInput.x * speed * Time.deltaTime, myBody.velocity.y);
+            myBody.velocity = new Vector2(0, 0);
+            return;
         }
-         
-        //Debug.Log(moveInput.x * speed * Vector2.right);
-        //myBody.AddForce(moveInput.x * speed * Vector2.right, ForceMode2D.Force);
-
+        if(grounded && myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            float newXVel = moveInput.x * speed * Time.deltaTime;
+            myBody.velocity = new Vector2(newXVel, myBody.velocity.y);
+        }
+    }
+    private void Float()
+    {
+        if(isFloating && finishLocation!=null)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, finishLocation.position, Time.deltaTime * floatSpeed);
+        }
+        
     }
 
     private void FlipSprite()
@@ -144,6 +239,21 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void OnFire(InputValue value)
+    {
+        
+        if(value.isPressed && canAttack && HasEnergy(attackCost))
+        {
+            boom.Play();
+            SpendEnergy(attackCost);
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(t.position, fireRadius, new Vector2(0, 0), 0, LayerMask.GetMask("Enemy"));
+            foreach(RaycastHit2D hit in hits)
+            {
+                hit.collider.gameObject.GetComponent<Enemy>().KillMe();
+            }
+        }
+    }
+
     void OnMove(InputValue value)
     {
         if (!canMove) { return; }
@@ -152,8 +262,8 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-
-        if (!canMove) { return; }
+        
+        if (!canMove || ! canJump) { return; }
         if (value.isPressed && myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")) &&HasEnergy(jumpCost))
         {
             grounded = false;
@@ -161,8 +271,7 @@ public class PlayerController : MonoBehaviour
             SpendEnergy(jumpCost);
             //this is a fake change;
             //myBody.velocity += new Vector2(myBody.velocity.x, jumpForce)*Time.deltaTime;
-            myBody.AddForce((moveInput*speed*10)*Time.deltaTime+ (Vector2.up * jumpForce), ForceMode2D.Impulse);
-
+            myBody.AddForce(new Vector2(moveInput.x*speed*0.02f,0f)+ (Vector2.up * jumpForce), ForceMode2D.Impulse);
 
             if (Mathf.Abs(myBody.velocity.x) > Mathf.Epsilon)
             {
@@ -170,6 +279,61 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+    }
+
+    void OnCry(InputValue value)
+    {
+        if(canAttack && currentCryCooldown.Get()<=0)
+        {
+            if(cryStories.Count>0)
+            {
+                int index = Random.Range(0, cryStories.Count);
+                StoryPoint_SO story = cryStories[index];
+                cryStories.RemoveAt(index);
+                GameManager.instance.SetCurrentStory(story);
+                storyTriggered?.Raise();
+            }
+
+            StartCoroutine(Cry());
+            currentCryCooldown.Set(cryCooldown.Get());
+        }
+    }
+    IEnumerator Cry()
+    {
+        canMove = false;
+        canAttack = false;
+        float hps = cryHealth / cryDuration;
+        float eps = cryEnergy / cryDuration;
+        float currentDuration = 0;
+        cryParticles.Play();
+        cryForcefield.enabled = true;
+        float initialRadius = cryForcefield.radius;
+        while(currentDuration<cryDuration)
+        {
+            float delta = hps * Time.deltaTime;
+            IncrementHealth(delta);
+
+            currentDuration += Time.deltaTime;
+            cryForcefield.radius += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        cryForcefield.enabled = false;
+        cryForcefield.radius = initialRadius;
+        cryParticles.Stop();
+        canMove = true;
+        canAttack = true;
+    }
+
+    private void IncrementHealth(float amount)
+    {
+        amount = Mathf.Clamp(amount, 0 , maxHealth.Get() - health.Get());
+        health.Increment(amount);
+    }
+
+    private void IncrementEnergy(float amount)
+    {
+        amount = Mathf.Clamp(amount, 0, maxEnergy.Get() - energy.Get());
+        energy.Increment(amount);
     }
 
     bool HasEnergy(float cost)
@@ -198,6 +362,48 @@ public class PlayerController : MonoBehaviour
     {
         myBody.gravityScale -= amount;
         speed+=amount*5;
+    }
+
+    public void StopMovement()
+    {
+        moveInput = new Vector2(0, 0);
+        canMove = false;
+        freezeMovement = true;
+    }
+
+    public void ResetMovement()
+    {
+        canMove = true;
+        freezeMovement = false;
+    }
+
+    public void CheckHealth()
+    {
+        if(health.Get()<=0)
+        {
+            health.Set(newLevelHealthBoost);
+            triggerPortalEvent?.Raise();
+        }
+        
+    }
+
+    public void GoodMemory()
+    {
+        energy.Increment(goodMemoryEnergy);
+        goodMemoryParticles.Play();
+    }
+
+    public void StartHealth()
+    {
+        //health.Increment(newLevelHealthBoost);
+    }
+
+    public void Finale()
+    {
+        canMove = false;
+        isFloating = true;
+        freezeMovement = true;
+        
     }
 
 

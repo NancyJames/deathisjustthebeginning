@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9178a1fb3ba08054681ceb592ac34785, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2747690628134850419, guid: b670ab75dde984907b8570040daa08c5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 36111154a2c3bb94b82fa9957de78e66, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c47fd0a5d4afe14288d20fb5e02d175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amountToSlow: 2
+  amountToSlow: 3
   timeToSlow: 10
 --- !u!61 &1769623510893290563
 BoxCollider2D:
@@ -118,7 +118,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 0.8828125}
+    oldSize: {x: 1, y: 1.989418}
     newSize: {x: 1, y: 0.8828125}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -141,3 +141,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   story: {fileID: 11400000, guid: 39793b472ba2efd4da35450c919ce7aa, type: 2}
   storyTriggered: {fileID: 11400000, guid: 7a172ad0489034f4f8f04a9bedfcc29e, type: 2}
+  memoryCooldown: 6

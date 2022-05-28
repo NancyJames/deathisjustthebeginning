@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3840163366337868224}
   - component: {fileID: 3825484135418674194}
+  - component: {fileID: 6693731433543292219}
+  - component: {fileID: 370757946141072587}
   m_Layer: 0
   m_Name: MusicManager
   m_TagString: Untagged
@@ -43,10 +45,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -128,6 +130,64 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6693731433543292219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3506872916996838625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b4eb474b3cd5547a9c04c8e5e6bdba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicTransitionSecs: 3
+--- !u!114 &370757946141072587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3506872916996838625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a633027089bb54692bc988f057d072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listeners:
+  - Event: {fileID: 11400000, guid: 149e266ba2b93474681f490cd2ca143f, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6693731433543292219}
+          m_TargetAssemblyTypeName: MusicManager, Assembly-CSharp
+          m_MethodName: SceneLoaded
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 3f4c39d602cd1af4e80a45c775e07024, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6693731433543292219}
+          m_TargetAssemblyTypeName: MusicManager, Assembly-CSharp
+          m_MethodName: SceneUnloaded
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6165765258224816354
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,6 +268,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeOutTime: 0.5
   fadeInTime: 1
+  sceneLoaded: {fileID: 11400000, guid: 149e266ba2b93474681f490cd2ca143f, type: 2}
+  sceneUnloaded: {fileID: 11400000, guid: 3f4c39d602cd1af4e80a45c775e07024, type: 2}
 --- !u!1 &7831916043113940882
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +286,6 @@ GameObject:
   - component: {fileID: 7831916043113940879}
   - component: {fileID: 7831916043113940880}
   - component: {fileID: 7831916043113940881}
-  - component: {fileID: 7831916043113940873}
   m_Layer: 5
   m_Name: Fader
   m_TagString: Untagged
@@ -271,7 +332,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &7831916043113940876
 MonoBehaviour:
@@ -322,8 +383,8 @@ CanvasGroup:
   m_GameObject: {fileID: 7831916043113940882}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &7831916043113940879
 MonoBehaviour:
@@ -375,15 +436,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7831916043113940873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7831916043113940882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9be6b54fb5d54944aa6445e14b4dfaca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

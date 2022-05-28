@@ -47,8 +47,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelsToMoveTo: 010000000200000003000000
   levelExit: 1
-  fadeOutTime: 0.5
-  fadeInTime: 0.5
+  music: {fileID: 0}
+  storyPlaying: {fileID: 11400000, guid: 81aa23606a9b9e04783d62744200cdb6, type: 2}
+  waitingToLoadEvent: {fileID: 11400000, guid: f8e7a5526767d034cb5c70588f87d993, type: 2}
+  highestLevel: {fileID: 11400000, guid: efc1e7989ed0db6408bb29d61d3b1e10, type: 2}
+  timesVisited: {fileID: 0}
+  spawnPoints: []
 --- !u!114 &862078235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,9 +82,45 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - Event: {fileID: 11400000, guid: dfcdea81019c990488a465df616d1cc8, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
         - m_Target: {fileID: 688526980}
           m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
           m_MethodName: LoadRandomLevel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 9efb1eec28998e1419148b6ae25b1018, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 688526980}
+          m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+          m_MethodName: ProcessStoryFinished
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Event: {fileID: 11400000, guid: 149e266ba2b93474681f490cd2ca143f, type: 2}
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 688526980}
+          m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+          m_MethodName: MoveToSpawnPoint
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

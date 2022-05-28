@@ -11,7 +11,7 @@ namespace HR.Utilities.Variables
 		public int storedValue;
 
 		[NonSerialized]
-		public int runtimeValue;
+		private int runtimeValue;
 
 		public void OnAfterDeserialize()
 		{

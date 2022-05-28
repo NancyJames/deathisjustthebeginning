@@ -100,9 +100,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boostedStat: {fileID: 11400000, guid: 68b3ad03e9011e14ea387a4780d58b60, type: 2}
-  amount: 20
+  maxBoostedStat: {fileID: 11400000, guid: 5862b38ce51dc0b44906713bb7f06196, type: 2}
+  amount: 10
   debuffedStat: {fileID: 11400000, guid: 1231188b1ead325458aeec30994f0626, type: 2}
-  debuffAmount: 2
+  debuffAmount: 3
+  respawnTime: 0
 --- !u!114 &4596817476667091131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,6 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   story: {fileID: 11400000, guid: f0c473a82a17da24eb94b118121a5279, type: 2}
   storyTriggered: {fileID: 11400000, guid: 7a172ad0489034f4f8f04a9bedfcc29e, type: 2}
+  memoryCooldown: 6
 --- !u!61 &4596817476667091135
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -130,16 +133,16 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.015363693, y: -0.07374716}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.56, y: 2.56}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 2.56, y: 2.56}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.56, y: 2.56}
+  m_Size: {x: 0.8330803, y: 0.8392315}
   m_EdgeRadius: 0

@@ -7,6 +7,7 @@ public class StoryTrigger : MonoBehaviour
 {
     [SerializeField] StoryPoint_SO story;
     [SerializeField] GameEvent storyTriggered;
+    [SerializeField] float memoryCooldown = 6f;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,6 +15,17 @@ public class StoryTrigger : MonoBehaviour
         {
             GameManager.instance.SetCurrentStory(story);
             storyTriggered?.Raise();
+            if(story.IsMemory())
+            {
+                Invoke("ResetBeenSeen", memoryCooldown);
+            }
         }
     }
+
+    private void ResetBeenSeen()
+    {
+        story.ResetBeenSeen();
+    }
+
+    
 }
