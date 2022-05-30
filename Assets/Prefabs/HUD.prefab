@@ -886,8 +886,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 345, y: 465}
-  m_SizeDelta: {x: -860, y: -980}
+  m_AnchoredPosition: {x: 345, y: -12.5}
+  m_SizeDelta: {x: -860, y: -25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6697772872941722548
 GameObject:
@@ -1509,6 +1509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 7853911685331927988}
   startGameEvent: {fileID: 11400000, guid: 2d25fbae9beca314599be9831680b906, type: 2}
+  creditsScreen: {fileID: 0}
 --- !u!1 &6697772873973807896
 GameObject:
   m_ObjectHideFlags: 0

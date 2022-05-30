@@ -105,6 +105,7 @@ public class PlayerController : MonoBehaviour
         myFeet = GetComponentInChildren<CircleCollider2D>();
         playerInput = GetComponent<PlayerInput>();
         menuManager = FindObjectOfType<MenuManager>();
+        Cursor.visible = false;
     }
 
     private void Start()

@@ -30,11 +30,13 @@ public class MenuManager : MonoBehaviour
 
     public void ShowPause()
     {
+        Cursor.visible = true;
         pauseMenu.SetActive(true);
     }
 
     public void HidePause()
     {
+        Cursor.visible = false;
         pauseMenu.SetActive(false);
     }
 
