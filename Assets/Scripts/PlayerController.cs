@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     [Header("Other")]
     [SerializeField] GameEvent triggerPortalEvent;
     [SerializeField] GameEvent storyTriggered;
+    [SerializeField] GameEvent cryTriggered;
     [Header("Finale")]
     [SerializeField] GameEvent finale;
     [SerializeField] Transform finishLocation;
@@ -74,6 +75,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(-100, 100)] float overSaturationValue;
     [SerializeField] bool colorize = false;
     [SerializeField] Color colorOverlay;
+    [SerializeField] float flashSaturationValue = -100f;
+    [SerializeField] float flashSaturationTime = 1f;
 
     Transform t;
     bool freezeMovement = false;
@@ -84,6 +87,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] IntVariable denialVisited;
     [SerializeField] IntVariable angerVisited;
     [SerializeField] IntVariable regretVisited;
+
+    //rare bug where player can fall through floor even though collision detection is continuous. Bit of a kludge but don't want player stuck
+    [Header("Falling Through Floor Kludge")]
+    [SerializeField] float minY=3.5f;
+    [SerializeField] float maxY=14f;
+
+    PlayerInput playerInput;
+    MenuManager menuManager;
     
 
 
@@ -92,6 +103,8 @@ public class PlayerController : MonoBehaviour
     {
         myBody = GetComponent<Rigidbody2D>();
         myFeet = GetComponentInChildren<CircleCollider2D>();
+        playerInput = GetComponent<PlayerInput>();
+        menuManager = FindObjectOfType<MenuManager>();
     }
 
     private void Start()
@@ -132,8 +145,20 @@ public class PlayerController : MonoBehaviour
         }
         Regenerate();
         CooldownCry();
-
         UpdateDebuffTimers();
+        CheckIfFallenThroughFloor();
+    }
+
+    private void CheckIfFallenThroughFloor()
+    {
+        //only happens in anger level
+        if(canAttack)
+        {
+            if(t.position.y<minY)
+            {
+                t.position = new Vector3(t.position.x, maxY, t.position.z);
+            }
+        }
     }
 
     private void CooldownCry()
@@ -191,6 +216,21 @@ public class PlayerController : MonoBehaviour
             float y = transform.position.y*2;
             colorAdjustments.saturation.value = Mathf.Clamp(-100f + y, -100f, 0);
         }
+    }
+
+    public void RealityFlash()
+    {
+        if(colorAdjustments!=null)
+        {
+            StartCoroutine(FlashSaturation());
+        }
+    }
+    IEnumerator FlashSaturation()
+    {
+        float startingSaturation = colorAdjustments.saturation.value;
+        colorAdjustments.saturation.value = flashSaturationValue;
+        yield return new WaitForSeconds(flashSaturationTime);
+        colorAdjustments.saturation.value = startingSaturation;
     }
 
     private void Regenerate()
@@ -293,7 +333,7 @@ public class PlayerController : MonoBehaviour
                 GameManager.instance.SetCurrentStory(story);
                 storyTriggered?.Raise();
             }
-
+            cryTriggered?.Raise();
             StartCoroutine(Cry());
             currentCryCooldown.Set(cryCooldown.Get());
         }
@@ -312,6 +352,8 @@ public class PlayerController : MonoBehaviour
         {
             float delta = hps * Time.deltaTime;
             IncrementHealth(delta);
+            float delta2 = eps * Time.deltaTime;
+            IncrementEnergy(delta2);
 
             currentDuration += Time.deltaTime;
             cryForcefield.radius += Time.deltaTime;
@@ -381,7 +423,7 @@ public class PlayerController : MonoBehaviour
     {
         if(health.Get()<=0)
         {
-            health.Set(newLevelHealthBoost);
+           // health.Set(newLevelHealthBoost);
             triggerPortalEvent?.Raise();
         }
         
@@ -395,7 +437,13 @@ public class PlayerController : MonoBehaviour
 
     public void StartHealth()
     {
-        //health.Increment(newLevelHealthBoost);
+        health.Increment(newLevelHealthBoost);
+        //kludge, don't have time to do it properly
+        if(speed<150f)
+        {
+            //must be on depression level, increase speed for every visit to make it less painful
+            speed += 10f * depressionVisited.Get();
+        }
     }
 
     public void Finale()
@@ -404,6 +452,19 @@ public class PlayerController : MonoBehaviour
         isFloating = true;
         freezeMovement = true;
         
+    }
+
+    void OnOpenPause()
+    {
+        playerInput.SwitchCurrentActionMap("UI");
+        Time.timeScale = 0;
+        menuManager.ShowPause();
+    }
+    void OnClosePause()
+    {
+        playerInput.SwitchCurrentActionMap("Player");
+        Time.timeScale = 1;
+        menuManager.HidePause();
     }
 
 

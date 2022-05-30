@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] IntVariable highestLevel;
     [SerializeField] IntVariable timesVisited;
     [SerializeField] Transform[] spawnPoints;
+    [SerializeField] Transform background;
     bool waitingToLoad = false;
 
     
@@ -59,6 +60,10 @@ public class LevelManager : MonoBehaviour
                 }
             }
             player.transform.position = spawnPoints[index].position;
+            if(background!=null)
+            {
+                background.position = new Vector3(spawnPoints[index].position.x, background.position.y, background.position.z);
+            }
             if(turnOnTrail)
             {
                 tr.enabled = true;
@@ -69,6 +74,10 @@ public class LevelManager : MonoBehaviour
         timesVisited.Increment();
     }
 
+    public void OverrideChangeTrack()
+    {
+        dontChangeTrack = false;
+    }
 
     public bool ChangeTrack()
     {
@@ -119,6 +128,8 @@ public class LevelManager : MonoBehaviour
             LoadRandomLevelNow();  
         }
     }
+
+    
 
 
 }

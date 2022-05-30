@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: playerEnergy
   m_EditorClassIdentifier: 
   valueUpdated: {fileID: 11400000, guid: 2ba825184b154d346a6a538f476f9869, type: 2}
-  storedValue: 100
+  storedValue: 5

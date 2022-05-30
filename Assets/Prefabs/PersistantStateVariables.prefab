@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &885331665458227542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 885331665458227536}
+  - component: {fileID: 885331665458227543}
+  m_Layer: 0
+  m_Name: PersistantStateVariables
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &885331665458227536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885331665458227542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &885331665458227543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885331665458227542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 979a189ca0dbb6a499a4c748bb96d703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelMonitors:
+  - {fileID: 11400000, guid: 6468b039a6c31794a96666a3466a72de, type: 2}
+  - {fileID: 11400000, guid: ffe47ec5b9513524787c82fe12e66cfd, type: 2}
+  - {fileID: 11400000, guid: 1b20d68c80a61b6418ccef2302c815f1, type: 2}
+  - {fileID: 11400000, guid: bdf668aebc6306e43b2417ff1d24f741, type: 2}
+  - {fileID: 11400000, guid: efc1e7989ed0db6408bb29d61d3b1e10, type: 2}
+  - {fileID: 11400000, guid: de0a177d5f0b050479d1b66470a6f5f8, type: 2}
+  - {fileID: 11400000, guid: 328a7cff1a432d444841559c4c194149, type: 2}
+  storyTriggers:
+  - {fileID: 11400000, guid: 302bdcf90cfb9fb4f8f7b1484c158b23, type: 2}
+  - {fileID: 11400000, guid: 80f31ddb94e0b7b4db2c16e05831d6a5, type: 2}
+  - {fileID: 11400000, guid: f0c473a82a17da24eb94b118121a5279, type: 2}
+  - {fileID: 11400000, guid: 39793b472ba2efd4da35450c919ce7aa, type: 2}
+  - {fileID: 11400000, guid: 6df37fa24dec9604485d3dcfa9e37329, type: 2}
+  - {fileID: 11400000, guid: ee63e262152a5b0409a39841439c4f38, type: 2}
+  - {fileID: 11400000, guid: 2bf52fcadd30e064b81601a04a3dc942, type: 2}
+  playerStats:
+  - {fileID: 11400000, guid: 28218b0488349304dae5522047edd33d, type: 2}
+  - {fileID: 11400000, guid: 1231188b1ead325458aeec30994f0626, type: 2}
+  - {fileID: 11400000, guid: 68b3ad03e9011e14ea387a4780d58b60, type: 2}

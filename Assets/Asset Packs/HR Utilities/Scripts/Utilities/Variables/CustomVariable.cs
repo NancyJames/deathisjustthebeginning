@@ -13,6 +13,7 @@ namespace HR.Utilities.Variables
         {
             valueUpdated?.Raise();
         }
+
         
     }
 }

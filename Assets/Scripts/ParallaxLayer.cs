@@ -32,8 +32,9 @@ public class ParallaxLayer : MonoBehaviour
         lastCameraPosition = cameraTransform.position;
         Sprite sprite = GetComponent<SpriteRenderer>().sprite;
         Texture2D texture = sprite.texture;
-        textureUnitSizeX = texture.width / sprite.pixelsPerUnit;
-        textureUnitSizeY = texture.height / sprite.pixelsPerUnit;
+        //HR: added scaling 
+        textureUnitSizeX = (texture.width / sprite.pixelsPerUnit) * (transform.parent.localScale.x*transform.localScale.x) ;
+        textureUnitSizeY = (texture.height / sprite.pixelsPerUnit) * (transform.parent.localScale.x * transform.localScale.x);
     }
 
     private void LateUpdate()
@@ -48,7 +49,6 @@ public class ParallaxLayer : MonoBehaviour
             {
                 
                 float offsetPositionX = (cameraTransform.position.x - transform.position.x) % textureUnitSizeX;
-                Debug.Log("jumping forward " + offsetPositionX + transform.position.x + "%" + textureUnitSizeX); ;
                 transform.position = new Vector3(cameraTransform.position.x + offsetPositionX, transform.position.y);
             }
         }

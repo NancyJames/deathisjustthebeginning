@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: kitty
   m_EditorClassIdentifier: 
   story: Here, kitty, kitty.  Did you send this cat to comfort me?  I've never seen
-    him before and he just ran up to me when I opened the door
+    him before and he just ran up to me when I opened the door. You always loved
+    animals
   isMemory: 1

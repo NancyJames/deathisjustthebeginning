@@ -101,6 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTrap: 1
   goodMemoryEvent: {fileID: 11400000, guid: b66f5e831ef020d4da10bb0051f6b854, type: 2}
+  badMemoryEvent: {fileID: 11400000, guid: 61b6a948b0d944447b7159672217a8fe, type: 2}
+  visitedColor: {r: 1, g: 1, b: 1, a: 0.5529412}
 --- !u!114 &1597706568724878688
 MonoBehaviour:
   m_ObjectHideFlags: 0

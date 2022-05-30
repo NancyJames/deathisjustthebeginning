@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a7b4169d302ee4b981a75e68a95d80, type: 3}
   m_Name: birthday 2
   m_EditorClassIdentifier: 
-  story: I wasn't going to have a party but they said you were going to be fine.
-    The day before is when we got the news. I don't think I can face another birthday
+  story: I wasn't going to have a birthday party but they said you were going to
+    be fine. The day before is when we got the news. I don't think I can face another
+    birthday
   isMemory: 1
